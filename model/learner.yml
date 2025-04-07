@@ -1,0 +1,68 @@
+learner:
+  description: "Schema para rastrear o desempenho de um aprendiz em Aritmética"
+  type: dict
+  properties:
+    id:
+      type: string
+      description: "Identificador único do aprendiz"
+      example: "learner_001"
+    answers:
+      type: dict
+      description: "Respostas do aprendiz às questões (chave: ID da questão, valor: A/B/C/D/E)"
+      example: { "1": "A", "2": "B", "3": "C" }
+    performance:
+      type: dict
+      description: "Métricas de desempenho do aprendiz por tópico e área"
+      properties:
+        topics:
+          type: dict
+          description: "Métricas para cada tópico específico dentro de Aritmética"
+          value:
+            type: dict
+            properties:
+              total_questions:
+                type: int
+                description: "Número total de questões respondidas neste tópico"
+                min: 0
+              percent_correct_easy_questions:
+                type: float
+                description: "Percentual de acertos em questões fáceis"
+                range: [0.0, 100.0]
+              percent_correct_medium_questions:
+                type: float
+                description: "Percentual de acertos em questões médias"
+                range: [0.0, 100.0]
+              percent_correct_hard_questions:
+                type: float
+                description: "Percentual de acertos em questões difíceis"
+                range: [0.0, 100.0]
+              points:
+                type: int
+                description: "Total de pontos acumulados no tópico"
+                min: 0
+        areas:
+          type: dict
+          description: "Métricas para cada grande área de Aritmética"
+          value:
+            type: dict
+            properties:
+              total_questions:
+                type: int
+                description: "Número total de questões respondidas nesta área"
+                min: 0
+              percent_correct_easy_questions:
+                type: float
+                description: "Percentual de acertos em questões fáceis"
+                range: [0.0, 100.0]
+              percent_correct_medium_questions:
+                type: float
+                description: "Percentual de acertos em questões médias"
+                range: [0.0, 100.0]
+              percent_correct_hard_questions:
+                type: float
+                description: "Percentual de acertos em questões difíceis"
+                range: [0.0, 100.0]
+              points:
+                type: int
+                description: "Total de pontos acumulados na área"
+                min: 0

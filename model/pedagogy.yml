@@ -1,0 +1,115 @@
+feedback_types:
+
+  - name: "autonomia"
+    description: "Incentiva os aprendizes a assumirem o controle de seu aprendizado, explorando tópicos de forma independente ou definindo seus próprios objetivos."
+    message: "Você está fazendo um bom progresso em {item}. Considere explorá-lo mais a fundo por conta própria para aprofundar sua compreensão."
+
+  - name: "competência"
+    description: "Reforça a capacidade do aprendiz de dominar o material, destacando o progresso e os pontos fortes."
+    message: "Você está demonstrando grande competência em {item}! Continue com o excelente trabalho."
+
+  - name: "pertencimento"
+    description: "Faz o aprendiz se sentir conectado e apoiado, normalizando as dificuldades e sugerindo colaboração."
+    message: "Muitos alunos acham {item} desafiador. Você não está sozinho—vamos resolver isso juntos."
+
+  - name: "urgente"
+    description: "Indica a necessidade de atenção imediata a conceitos fundamentais devido a dificuldades com questões fáceis."
+    message: "Urgente: Você teve dificuldades com questões fáceis em {item}. Vamos revisar os conceitos básicos para fortalecer sua base."
+
+  - name: "revisão"
+    description: "Sugere revisitar o tópico para reforçar a compreensão, especialmente para conceitos mais desafiadores."
+    message: "Considere revisar {item}, especialmente os conceitos mais difíceis, para melhorar sua maestria."
+
+feedback_rules:
+
+  - name: "Pertencimento para baixo desempenho em tópico"
+    condition:
+      type: "less_than"
+      left: "performance.topics[topic].percent_correct"
+      right: 50.0
+    action:
+      feedback_pertencimento[topic]: 1
+    description: "Gera feedback de pertencimento se o desempenho no tópico for abaixo de 50%"
+
+  - name: "Competência para alto desempenho em tópico"
+    condition:
+      type: "greater_than"
+      left: "performance.topics[topic].percent_correct"
+      right: 80.0
+    action:
+      feedback_competência[topic]: 1
+    description: "Gera feedback de competência se o desempenho no tópico for superior a 80%"
+
+  - name: "Autonomia para desempenho moderado em tópico"
+    condition:
+      type: "and"
+      conditions:
+        - type: "greater_than_or_equal"
+          left: "performance.topics[topic].percent_correct"
+          right: 50.0
+        - type: "less_than_or_equal"
+          left: "performance.topics[topic].percent_correct"
+          right: 80.0
+    action:
+      feedback_autonomia[topic]: 1
+    description: "Gera feedback de autonomia se o desempenho no tópico estiver entre 50% e 80%"
+
+  - name: "Pertencimento para baixo desempenho em área"
+    condition:
+      type: "less_than"
+      left: "performance.areas[area].percent_correct"
+      right: 50.0
+    action:
+      feedback_pertencimento[area]: 1
+    description: "Gera feedback de pertencimento se o desempenho na área for abaixo de 50%"
+
+  - name: "Competência para alto desempenho em área"
+    condition:
+      type: "greater_than"
+      left: "performance.areas[area].percent_correct"
+      right: 80.0
+    action:
+      feedback_competência[area]: 1
+    description: "Gera feedback de competência se o desempenho na área for superior a 80%"
+
+  - name: "Autonomia para desempenho moderado em área"
+    condition:
+      type: "and"
+      conditions:
+        - type: "greater_than_or_equal"
+          left: "performance.areas[area].percent_correct"
+          right: 50.0
+        - type: "less_than_or_equal"
+          left: "performance.areas[area].percent_correct"
+          right: 80.0
+    action:
+      feedback_autonomia[area]: 1
+    description: "Gera feedback de autonomia se o desempenho na área estiver entre 50% e 80%"
+
+  - name: "Foco urgente em tópico devido a falha em questões fáceis"
+    condition:
+      type: "and"
+      conditions:
+        - type: "greater_than"
+          left: "performance.topics[topic].difficulty_breakdown.easy"
+          right: 0
+        - type: "less_than"
+          left: "performance.topics[topic].percent_correct"
+          right: 50.0
+    action:
+      feedback_urgente[topic]: 1
+    description: "Gera foco urgente se houver questões fáceis e o desempenho no tópico for abaixo de 50%"
+
+  - name: "Revisão de tópico devido a fraqueza em questões difíceis"
+    condition:
+      type: "and"
+      conditions:
+        - type: "greater_than"
+          left: "performance.topics[topic].difficulty_breakdown.hard"
+          right: 0
+        - type: "less_than"
+          left: "performance.topics[topic].percent_correct"
+          right: 70.0
+    action:
+      feedback_revisão[topic]: 1
+    description: "Gera revisão se houver questões difíceis e o desempenho no tópico for abaixo de 70%"

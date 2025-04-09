@@ -1,24 +1,24 @@
 feedback_types:
 
   - name: "autonomia"
-    description: "Incentiva os aprendizes a assumirem o controle de seu aprendizado, explorando tópicos de forma independente ou definindo seus próprios objetivos."
-    message: "Você está fazendo um bom progresso em {item}. Considere explorá-lo mais a fundo por conta própria para aprofundar sua compreensão."
+    description: "Muito bom, com poucos erros"
+    message: "Você está fazendo um bom progresso em {item}. Houve apenas pequenos deslizes, que você provavelmente consegue corrigir ao revisar por conta própria. Que tal tentar explicar o conteúdo para alguém ou criar seus próprios desafios? Isso pode fortalecer ainda mais seu aprendizado."
 
   - name: "competência"
-    description: "Reforça a capacidade do aprendiz de dominar o material, destacando o progresso e os pontos fortes."
-    message: "Você está demonstrando grande competência em {item}! Continue com o excelente trabalho."
+    description: "Acertos quase totais ou totais"
+    message: "Você está demonstrando grande competência em {item}! Parabéns! Sua resolução está clara e bem estruturada. Continue assim! Seu progresso é visível e mostra o quanto você está se aprofundando no conteúdo."
 
   - name: "pertencimento"
-    description: "Faz o aprendiz se sentir conectado e apoiado, normalizando as dificuldades e sugerindo colaboração."
-    message: "Muitos alunos acham {item} desafiador. Você não está sozinho, vamos resolver isso juntos."
+    description: "Razoável, mas com dificuldades frequentes"
+    message: "Muitos alunos acham {item} desafiador. Está tudo bem não ter conseguido ainda. Isso acontece com todos em algum momento. O importante agora é não desistir."
 
   - name: "urgente"
-    description: "Indica a necessidade de atenção imediata a conceitos fundamentais devido a dificuldades com questões fáceis."
-    message: "Urgente: Você teve dificuldades com questões fáceis em {item}. Vamos revisar os conceitos básicos para fortalecer sua base."
-
+    description: "Pouco ou nenhum acerto"
+    message: "Você teve dificuldades com questões fáceis em {item}, o que indica que precisamos reforçar alguns fundamentos importantes. Revise esses pontos para garantir uma base sólida.
+ 
   - name: "revisão"
-    description: "Sugere revisitar o tópico para reforçar a compreensão, especialmente para conceitos mais desafiadores."
-    message: "Considere revisar {item}, especialmente os conceitos mais difíceis, para melhorar sua maestria."
+    description: "Bom, mas com erros que indicam lacunas"
+    message: "Considere revisar {item}, especialmente os conceitos mais difíceis, para melhorar sua maestria. Alguns erros sugerem que certos pontos ainda precisam de reforço. Que tal revisar os exercícios em que teve mais dificuldade?"
 
 feedback_rules:
 

@@ -10,7 +10,7 @@ feedback_types:
 
   - name: "pertencimento"
     description: "Faz o aprendiz se sentir conectado e apoiado, normalizando as dificuldades e sugerindo colaboração."
-    message: "Muitos alunos acham {item} desafiador. Você não está sozinho—vamos resolver isso juntos."
+    message: "Muitos alunos acham {item} desafiador. Você não está sozinho, vamos resolver isso juntos."
 
   - name: "urgente"
     description: "Indica a necessidade de atenção imediata a conceitos fundamentais devido a dificuldades com questões fáceis."

@@ -1,5 +1,4 @@
-learner:
-  description: "Schema para rastrear o desempenho de um aprendiz em Aritmética"
+ description: "Schema para rastrear o desempenho de um aprendiz em Aritmética"
   type: dict
   properties:
     id:
@@ -40,6 +39,18 @@ learner:
                 type: int
                 description: "Total de pontos acumulados no tópico"
                 min: 0
+              feedbacks:
+                type: list
+                description: "Feedbacks gerados com base no desempenho"
+                items:
+                  type: dict
+                  properties:
+                    feedback_type:
+                      type: string
+                      description: "Tipo de feedback"
+                    message:
+                      type: string
+                      description: "Mensagem de feedback personalizada"
         areas:
           type: dict
           description: "Métricas para cada grande área de Aritmética"
@@ -66,3 +77,15 @@ learner:
                 type: int
                 description: "Total de pontos acumulados na área"
                 min: 0
+              feedbacks:
+                type: list
+                description: "Feedbacks gerados com base no desempenho"
+                items:
+                  type: dict
+                  properties:
+                    feedback_type:
+                      type: string
+                      description: "Tipo de feedback"
+                    message:
+                      type: string
+                      description: "Mensagem de feedback personalizada"

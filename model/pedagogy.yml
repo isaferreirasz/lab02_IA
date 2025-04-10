@@ -1,115 +1,83 @@
 feedback_types:
 
-  - name: "autonomia"
-    description: "Muito bom, com poucos erros"
-    message: "Você está fazendo um bom progresso em {item}. Houve apenas pequenos deslizes, que você provavelmente consegue corrigir ao revisar por conta própria. Que tal tentar explicar o conteúdo para alguém ou criar seus próprios desafios? Isso pode fortalecer ainda mais seu aprendizado."
+  - name: "rever_conceito"
+    description: "Aluno errou várias vezes no mesmo conceito"
+    message: "Você teve dificuldades consistentes em {item}. Recomendamos revisar a explicação teórica antes de tentar novas questões."
 
-  - name: "competência"
-    description: "Acertos quase totais ou totais"
-    message: "Você está demonstrando grande competência em {item}! Parabéns! Sua resolução está clara e bem estruturada. Continue assim! Seu progresso é visível e mostra o quanto você está se aprofundando no conteúdo."
+  - name: "fazer_exercicios"
+    description: "Aluno com acerto médio mas pouca prática"
+    message: "Você acertou uma parte das questões em {item}, mas praticou pouco. Resolver mais exercícios vai te ajudar a consolidar o conteúdo."
 
-  - name: "pertencimento"
-    description: "Razoável, mas com dificuldades frequentes"
-    message: "Muitos alunos acham {item} desafiador. Está tudo bem não ter conseguido ainda. Isso acontece com todos em algum momento. O importante agora é não desistir."
+  - name: "usar_exemplos"
+    description: "Erros mostram falta de modelo ou referência"
+    message: "Tente estudar resoluções de exemplos passo a passo em {item}. Isso pode ajudar a entender o processo com mais clareza."
 
-  - name: "urgente"
-    description: "Pouco ou nenhum acerto"
-    message: "Você teve dificuldades com questões fáceis em {item}, o que indica que precisamos reforçar alguns fundamentos importantes. Revise esses pontos para garantir uma base sólida.
- 
-  - name: "revisão"
-    description: "Bom, mas com erros que indicam lacunas"
-    message: "Considere revisar {item}, especialmente os conceitos mais difíceis, para melhorar sua maestria. Alguns erros sugerem que certos pontos ainda precisam de reforço. Que tal revisar os exercícios em que teve mais dificuldade?"
+  - name: "mudar_estrategia"
+    description: "Aluno insistiu no erro sem sucesso"
+    message: "Você tentou resolver {item} várias vezes da mesma forma e errou. Que tal tentar uma abordagem diferente?"
+
+  - name: "ir_para_topico_relacionado"
+    description: "Erros indicam lacuna em pré-requisito"
+    message: "Os erros em {item} podem estar ligados a um conteúdo anterior. Recomendamos revisar o tópico relacionado antes de continuar."
+
+  - name: "avancar_conteudo"
+    description: "Desempenho consistente e sem erros"
+    message: "Você dominou bem {item}. Pode avançar para o próximo conteúdo."
+
 
 feedback_rules:
 
-  - name: "Pertencimento para baixo desempenho em tópico"
+  - name: "Revisar conceito após 3 erros no mesmo item"
+    condition:
+      type: "consecutive_errors"
+      target: "topic"
+      count: 3
+    action:
+      feedback_rever_conceito[topic]: 1
+    description: "Gera revisão quando o aluno erra 3 vezes seguidas no mesmo tópico"
+
+  - name: "Fazer mais exercícios com prática insuficiente"
     condition:
       type: "less_than"
-      left: "performance.topics[topic].percent_correct"
-      right: 50.0
+      left: "performance.topics[topic].total_questions"
+      right: 4
     action:
-      feedback_pertencimento[topic]: 1
-    description: "Gera feedback de pertencimento se o desempenho no tópico for abaixo de 50%"
+      feedback_fazer_exercicios[topic]: 1
+    description: "Sugere mais prática quando há poucas questões resolvidas"
 
-  - name: "Competência para alto desempenho em tópico"
+  - name: "Usar exemplos após erro conceitual identificado"
     condition:
-      type: "greater_than"
-      left: "performance.topics[topic].percent_correct"
-      right: 80.0
+      type: "error_type"
+      error: "conceitual"
+      count: 2
     action:
-      feedback_competência[topic]: 1
-    description: "Gera feedback de competência se o desempenho no tópico for superior a 80%"
+      feedback_usar_exemplos[topic]: 1
+    description: "Sugere uso de exemplos após erros conceituais repetidos"
 
-  - name: "Autonomia para desempenho moderado em tópico"
+  - name: "Mudar estratégia após várias tentativas sem sucesso"
     condition:
-      type: "and"
-      conditions:
-        - type: "greater_than_or_equal"
-          left: "performance.topics[topic].percent_correct"
-          right: 50.0
-        - type: "less_than_or_equal"
-          left: "performance.topics[topic].percent_correct"
-          right: 80.0
+      type: "failed_attempts"
+      target: "topic"
+      count: 5
     action:
-      feedback_autonomia[topic]: 1
-    description: "Gera feedback de autonomia se o desempenho no tópico estiver entre 50% e 80%"
+      feedback_mudar_estrategia[topic]: 1
+    description: "Sugere outra abordagem após tentativas repetidas sem acerto"
 
-  - name: "Pertencimento para baixo desempenho em área"
+  - name: "Revisar pré-requisito com base em dependência conceitual"
     condition:
-      type: "less_than"
-      left: "performance.areas[area].percent_correct"
-      right: 50.0
+      type: "prerequisite_failure"
+      topic: "{topic}"  
+      prerequisite: "{prerequisite}"  
     action:
-      feedback_pertencimento[area]: 1
-    description: "Gera feedback de pertencimento se o desempenho na área for abaixo de 50%"
+      feedback_ir_para_topico_relacionado["{prerequisite}"]: 1
+    description: "Direciona à revisão do pré-requisito com base em erro no tópico atual"
 
-  - name: "Competência para alto desempenho em área"
+  - name: "Avançar conteúdo com domínio completo"
     condition:
-      type: "greater_than"
-      left: "performance.areas[area].percent_correct"
-      right: 80.0
+      type: "mastery"
+      topic: "{item}"  # Tópico do aluno
     action:
-      feedback_competência[area]: 1
-    description: "Gera feedback de competência se o desempenho na área for superior a 80%"
+      feedback_avancar_conteudo[item]: 1
+    description: "Permite avanço quando o aluno já domina o conteúdo"
 
-  - name: "Autonomia para desempenho moderado em área"
-    condition:
-      type: "and"
-      conditions:
-        - type: "greater_than_or_equal"
-          left: "performance.areas[area].percent_correct"
-          right: 50.0
-        - type: "less_than_or_equal"
-          left: "performance.areas[area].percent_correct"
-          right: 80.0
-    action:
-      feedback_autonomia[area]: 1
-    description: "Gera feedback de autonomia se o desempenho na área estiver entre 50% e 80%"
 
-  - name: "Foco urgente em tópico devido a falha em questões fáceis"
-    condition:
-      type: "and"
-      conditions:
-        - type: "greater_than"
-          left: "performance.topics[topic].difficulty_breakdown.easy"
-          right: 0
-        - type: "less_than"
-          left: "performance.topics[topic].percent_correct"
-          right: 50.0
-    action:
-      feedback_urgente[topic]: 1
-    description: "Gera foco urgente se houver questões fáceis e o desempenho no tópico for abaixo de 50%"
-
-  - name: "Revisão de tópico devido a fraqueza em questões difíceis"
-    condition:
-      type: "and"
-      conditions:
-        - type: "greater_than"
-          left: "performance.topics[topic].difficulty_breakdown.hard"
-          right: 0
-        - type: "less_than"
-          left: "performance.topics[topic].percent_correct"
-          right: 70.0
-    action:
-      feedback_revisão[topic]: 1
-    description: "Gera revisão se houver questões difíceis e o desempenho no tópico for abaixo de 70%"
